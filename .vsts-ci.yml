@@ -1,0 +1,28 @@
+resources:
+- repo: self
+queue:
+  name: Hosted Linux Preview
+  #condition: succeeded()
+  demands: maven
+
+steps:
+- task: Maven@2
+  displayName: Maven pom.xml
+  inputs:
+    options: '-B'
+    codeCoverageToolOption: JaCoCo
+
+- task: Docker@0
+  displayName: Build an image
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: dockerhub
+    imageName: 'timwebster9/boot-app-static:$(Build.BuildId)'
+
+- task: Docker@0
+  displayName: Push an image
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: dockerhub
+    action: 'Push an image'
+    imageName: 'timwebster9/boot-app-static:$(Build.BuildId)'
