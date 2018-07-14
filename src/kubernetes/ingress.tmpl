@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ${SERVICE_NAME}-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+spec:
+  rules:
+  - host: buildit-jenkins.portworx.zone
+    http:
+      paths:
+      - path: /${SERVICE_NAME}
+        backend:
+          serviceName: ${SERVICE_NAME}
+          servicePort: 80

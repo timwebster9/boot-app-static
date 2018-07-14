@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ${SERVICE_NAME}
+spec:
+  selector:
+    app: ${SERVICE_NAME}
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${SERVICE_NAME}
+spec:
+  selector:
+    matchLabels:
+      app: ${SERVICE_NAME}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ${SERVICE_NAME}
+    spec:
+      containers:
+      - image: ${IMAGE_NAME}
+        name: ${SERVICE_NAME}
+        ports:
+        - containerPort: 8080
+          name: http
+
+
+
+
